@@ -1,0 +1,18 @@
+# Cut a release whenever a new tag is pushed to the repo.
+# You should use an annotated tag, like `git tag -a v1.2.3`
+# and put the release notes into the commit message for the tag.
+name: Release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    uses: publish-to-bcr-dev/.github/.github/workflows/release_ruleset.yaml@13563f8df6496c280491964c7deb98bf92fa3e7e
