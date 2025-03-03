@@ -1,0 +1,67 @@
+name: Publish
+
+on:
+  # Run the publish workflow after a successful release
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed      
+
+  # Manually trigger the publish workflow
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: Release tag to publish to the Bazel Central Registry
+        required: true
+        type: string
+      registry_fork:
+        description: Registry fork to push to
+        required: true
+        default: publish-to-bcr-dev/bazel-central-registry
+        type: string  
+      registry:
+        description: Override the registry to publish to
+        default: fweikert/bazel-central-registry
+        type: string
+      templates_ref:
+        description: Override the ref to read .bcr templates from
+        default: ''
+        type: string
+
+env:
+  # These defaults need to be repeated here for the `workflow_run` (release completed)
+  # case because there is no way to share the `workflow_dispatch` input defaults.
+  REGISTRY_FORK: publish-to-bcr-dev/bazel-central-registry
+  REGISTRY: fweikert/bazel-central-registry
+
+permissions:
+  id-token: write
+  attestations: write
+  contents: write
+
+jobs:
+  # We can't use ${{ env.XYZ }} as inputs to reusable workflows, so add an extra
+  # job just to set variables to be passed into the publish workflow.
+  # https://github.com/orgs/community/discussions/26671
+  prepare:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ inputs.tag_name || github.event.workflow_run.head_branch }}
+      registry: ${{ inputs.registry || env.REGISTRY }}
+      registry_fork: ${{ inputs.registry_fork || env.REGISTRY_FORK }}
+      templates_ref: ${{ inputs.templates_ref || inputs.tag_name }}
+    steps:
+      - run: echo "Preparing input variables"
+    
+  publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    needs: prepare
+    uses: publish-to-bcr-dev/.github/.github/workflows/publish.yaml@085c3f345883d4c2bcf98fd7e58dbad706e79db9
+    with:
+      tag_name: ${{ needs.prepare.outputs.tag_name }}
+      registry: ${{ needs.prepare.outputs.registry }}
+      registry_fork: ${{ needs.prepare.outputs.registry_fork }}
+      templates_ref: ${{ needs.prepare.outputs.templates_ref }}
+    secrets:
+      publish_token: ${{ secrets.PUBLISH_TOKEN }}
