@@ -1,0 +1,11 @@
+genrule(
+    name = "gen_test",
+    cmd = "echo 'exit 0' > $@",
+    executable = True,
+    outs = ["test.sh"],
+)
+
+sh_test(
+    name = "test",
+    srcs = [":gen_test"],
+)
