@@ -5,7 +5,7 @@ on:
   workflow_run:
     workflows: ["Release"]
     types:
-      - completed      
+      - completed
 
   # Manually trigger the publish workflow
   workflow_dispatch:
@@ -18,7 +18,7 @@ on:
         description: Registry fork to push to
         required: true
         default: publish-to-bcr-dev/bazel-central-registry
-        type: string  
+        type: string
       registry:
         description: Override the registry to publish to
         default: fweikert/bazel-central-registry
@@ -53,11 +53,11 @@ jobs:
       templates_ref: ${{ inputs.templates_ref || inputs.tag_name }}
     steps:
       - run: echo "Preparing input variables"
-    
+
   publish:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     needs: prepare
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@4efeedcad5239d35e80cc1f2c7b8ec97e721fb91
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@1deb2db3c2135d0fb14104c77e22fd956b683e26
     with:
       tag_name: ${{ needs.prepare.outputs.tag_name }}
       registry: ${{ needs.prepare.outputs.registry }}
@@ -65,4 +65,4 @@ jobs:
       templates_ref: ${{ needs.prepare.outputs.templates_ref }}
       attest: true
     secrets:
-      publish_token: ${{ secrets.PUBLISH_TOKEN }}
+      publish_token: ${{ secrets.TEST_PUBLISH_TOKEN }}
