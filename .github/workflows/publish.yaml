@@ -5,7 +5,7 @@ on:
   workflow_run:
     workflows: ["Release"]
     types:
-      - completed      
+      - completed
 
   # Manually trigger the publish workflow
   workflow_dispatch:
@@ -18,10 +18,10 @@ on:
         description: Registry fork to push to
         required: true
         default: publish-to-bcr-dev/bazel-central-registry
-        type: string  
+        type: string
       registry:
         description: Override the registry to publish to
-        default: fweikert/bazel-central-registry
+        default: publish-to-bcr-dev-registry/bazel-central-registry
         type: string
       templates_ref:
         description: Override the ref to read .bcr templates from
@@ -32,7 +32,7 @@ env:
   # These defaults need to be repeated here for the `workflow_run` (release completed)
   # case because there is no way to share the `workflow_dispatch` input defaults.
   REGISTRY_FORK: publish-to-bcr-dev/bazel-central-registry
-  REGISTRY: fweikert/bazel-central-registry
+  REGISTRY: publish-to-bcr-dev-registry/bazel-central-registry
 
 permissions:
   id-token: write
@@ -53,16 +53,18 @@ jobs:
       templates_ref: ${{ inputs.templates_ref || inputs.tag_name }}
     steps:
       - run: echo "Preparing input variables"
-    
+
   publish:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     needs: prepare
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@4efeedcad5239d35e80cc1f2c7b8ec97e721fb91
+    uses: mmorel-35/publish-to-bcr/.github/workflows/publish.yaml@e3d2f5c548497c6caee4e0ad991c23c79c0f79d7
     with:
       tag_name: ${{ needs.prepare.outputs.tag_name }}
       registry: ${{ needs.prepare.outputs.registry }}
       registry_fork: ${{ needs.prepare.outputs.registry_fork }}
       templates_ref: ${{ needs.prepare.outputs.templates_ref }}
       attest: true
+      open_pull_request: false
+      tag_prefix: bazel-v
     secrets:
       publish_token: ${{ secrets.PUBLISH_TOKEN }}

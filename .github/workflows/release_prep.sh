@@ -7,13 +7,13 @@ set -o errexit -o nounset -o pipefail
 TAG=${GITHUB_REF_NAME}
 
 # Substitute version into MODULE.bazel
-VERSION=${TAG#v}
+VERSION=${TAG#"bazel-v"}
 sed -i -e "s/0\\.0\\.0/${VERSION}/g" MODULE.bazel
 
 # The prefix is chosen to match what GitHub generates for source archives
 # This guarantees that users can easily switch from a released artifact to a source archive
 # with minimal differences in their code (e.g. strip_prefix remains the same)
-PREFIX="fixture-versioned-${TAG:1}"
+PREFIX="fixture-versioned-${TAG:7}"
 ARCHIVE="fixture-versioned-$TAG.tar.gz"
 ARCHIVE_TMP=$(mktemp)
 
