@@ -7,7 +7,7 @@ set -o errexit -o nounset -o pipefail
 TAG=${GITHUB_REF_NAME}
 
 # Substitute version into MODULE.bazel
-VERSION=${TAG#v}
+VERSION=${TAG#bazel-v}
 sed -i -e "s/0\\.0\\.0/${VERSION}/g" MODULE.bazel
 
 # The prefix is chosen to match what GitHub generates for source archives
