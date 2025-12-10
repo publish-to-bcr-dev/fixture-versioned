@@ -57,7 +57,7 @@ jobs:
   publish:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     needs: prepare
-    uses: mmorel-35/publish-to-bcr/.github/workflows/publish.yaml@e3d2f5c548497c6caee4e0ad991c23c79c0f79d7
+    uses: mmorel-35/publish-to-bcr/.github/workflows/publish.yaml@e0ed913301ba9760b9f5abaab3da9d4be69dc6f4
     with:
       tag_name: ${{ needs.prepare.outputs.tag_name }}
       registry: ${{ needs.prepare.outputs.registry }}
@@ -65,6 +65,5 @@ jobs:
       templates_ref: ${{ needs.prepare.outputs.templates_ref }}
       attest: true
       open_pull_request: false
-      tag_prefix: bazel-v
     secrets:
       publish_token: ${{ secrets.PUBLISH_TOKEN }}
