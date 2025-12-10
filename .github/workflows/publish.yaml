@@ -65,5 +65,6 @@ jobs:
       templates_ref: ${{ needs.prepare.outputs.templates_ref }}
       attest: true
       open_pull_request: false
+      environment: ""
     secrets:
       publish_token: ${{ secrets.PUBLISH_TOKEN }}
