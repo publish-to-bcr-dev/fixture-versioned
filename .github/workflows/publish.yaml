@@ -67,4 +67,4 @@ jobs:
       open_pull_request: false
       environment: test
     secrets:
-      publish_token: ${{ secrets.PUBLISH_TOKEN_FOO }}
+      publish_token: ${{ secrets.PUBLISH_TOKEN }}
