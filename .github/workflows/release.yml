@@ -15,6 +15,6 @@ permissions:
 
 jobs:
   release:
-    uses: publish-to-bcr-dev/.github/.github/workflows/release_ruleset.yaml@085c3f345883d4c2bcf98fd7e58dbad706e79db9
+    uses: publish-to-bcr-dev/.github/.github/workflows/release_ruleset.yaml@e0ed913301ba9760b9f5abaab3da9d4be69dc6f4
     with:
       release_files: fixture-versioned-*.tar.gz
