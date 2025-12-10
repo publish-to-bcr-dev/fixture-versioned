@@ -66,5 +66,5 @@ jobs:
       attest: true
       open_pull_request: false
       environment: test
-    # secrets:
-    #   publish_token: ${{ secrets.PUBLISH_TOKEN }}
+    secrets:
+      publish_token: ${{ secrets.PUBLISH_TOKEN_FOO }}
