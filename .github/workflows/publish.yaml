@@ -57,7 +57,7 @@ jobs:
   publish:
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     needs: prepare
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@e0ed913301ba9760b9f5abaab3da9d4be69dc6f4
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@c3ec675bcc818b1d48b0ce2b5f951154321c727d
     with:
       tag_name: ${{ needs.prepare.outputs.tag_name }}
       registry: ${{ needs.prepare.outputs.registry }}
