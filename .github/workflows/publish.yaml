@@ -36,12 +36,13 @@ on:
 
 jobs:
   publish:
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@fa2ae008c708886881d190bf6d3801b7e3345492
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@8d1cb25cc03397958db6e1c04ea73e97605ec2c7
     with:
       tag_name: ${{ inputs.tag_name }}
       registry: ${{ inputs.registry }}
       registry_fork: ${{ inputs.registry_fork }}
       attest: true
       open_pull_request: false
+      upload_attestations_to_draft: true
     secrets:
       publish_token: ${{ secrets.BCR_PUBLISH_TOKEN }}
