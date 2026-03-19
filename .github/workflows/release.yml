@@ -18,6 +18,7 @@ jobs:
     uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v7.4.0
     with:
       release_files: fixture-versioned-*.tar.gz
+      draft: true
   publish:
     needs: release
     uses: ./.github/workflows/publish.yaml

@@ -36,7 +36,7 @@ on:
 
 jobs:
   publish:
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@fa2ae008c708886881d190bf6d3801b7e3345492
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@f5633d27212a3ddbec99fc5ec07107bbb9ef7f05
     with:
       tag_name: ${{ inputs.tag_name }}
       registry: ${{ inputs.registry }}
